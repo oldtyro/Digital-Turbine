@@ -1,0 +1,113 @@
+﻿@using People.Models;
+
+@{
+    Layout = null;
+    ViewBag.Title = "ListPeople";
+
+    //AjaxOptions option = new AjaxOptions();
+    //option.Url = "/Person/ListPeople";
+    //option.UpdateTargetId = "";
+    //option.InsertionMode = InsertionMode.Replace;
+    //option.HttpMethod = "get";
+ }
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ListPeople</title>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="Scripts/angular.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <link href="/Content/bootstrap.min.css" rel="stylesheet">
+    <script>
+        function reloadList()
+        {
+            $.getJSON('/Person/ListPeopleJson?r=' + $("#r").val(), function (data) {
+                $("#t tr:gt(0)").remove();
+
+                for (var i = 0; i < data.length; i++)
+                {
+                    var newRow = "<tr><td>" + data[i].Name + "</td><td>" + data[i].Age + "</td><td>" + data[i].Height + "</td></tr>";
+                    $("#t tr:last").after(newRow);
+                }
+            })
+        }
+
+        function getInformation()
+        {
+            $.getJSON('/Person/GetPeopleInformation', function (data) {
+                alert(data);
+            })
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <select class="form-control" id="r" onchange="reloadList()">
+            @if (ViewBag.race == 0)
+            {
+                <option value="0" selected>Angles</option>
+            }
+            else
+            {
+                <option value="0">Angles</option>
+            }
+
+            @if (ViewBag.race == 1)
+            {
+                <option value="1" selected>Saxons</option>
+            }
+            else
+            {
+                <option value="1">Saxons</option>
+            }
+                
+            @if (ViewBag.race == 2)
+            {
+                <option value="2" selected>Jutes</option>
+            }
+            else
+            {
+                <option value="2">Jutes</option>
+            }
+
+            @if (ViewBag.race == 3)
+            {
+                <option value="3" selected>Asians</option>
+            }
+            else
+            {
+                <option value="3">Asians</option>
+            }
+        </select>
+        <input id="btnInfomation" type="button" value="Information" class="btn btn-default" onclick="getInformation()"/>
+    </div>
+    <br />
+    <br />
+    <div id="list">
+        <table class="table" id="t">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Height</th>
+                </tr>
+            </thead>
+            <tbody id="listTb">
+                @foreach (Person p in ViewBag.people)
+                {
+                    <tr>
+                        <td>@p.Name</td>
+                        <td>@p.Age</td>
+                        <td>@p.Height</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body >
+</html >
